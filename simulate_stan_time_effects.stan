@@ -17,10 +17,10 @@ parameters {
   vector<lower = 0>[K*T] mu; //firm inefficiency 
   real<lower = 0> sigma; //measurement error variance
   real<lower = 0> lambda;
-  vector[T*K] z;
+  vector[T] z;
 }
 transformed parameters {
-  vector[T*K] time_effect;
+  vector[T] time_effect;
   time_effect = alpha + time_effect_sd * z;
 }
 
@@ -37,7 +37,7 @@ model {
   // predicted firm output given data and parameters
   mu ~ exponential(lambda);
   for(i in 1:(K*T)){
-    Y[i] ~ normal(time_effect[time[i]] + X[i]*beta - mu, sigma);
+    Y[i] ~ normal(time_effect[time[i]] + X[i]*beta - mu[i], sigma);
   }
 }
 
